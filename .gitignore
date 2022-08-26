@@ -114,6 +114,9 @@ venv.bak/
 .spyderproject
 .spyproject
 
+# JetBrains project files
+.idea
+
 # Rope project settings
 .ropeproject
 
