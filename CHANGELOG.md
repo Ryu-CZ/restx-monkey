@@ -7,13 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Patch `flask_restx.reqparse.Argument` failing on `json` location when there is no `request` json body.
+
 ## [0.1.0] - 2022-08-26
 
 ### Added
 
 - Module `monkey` to perform patches of `flask-rest`.
 - Patch fatal import error of missing module `werkzeug.routing.parse_rule`.
-- Patch deprecated `flask_restx.api.Api` appending of swagger documentation `Api._register_doc` after Api is bound to flask app or blueprint.
+- Patch deprecated `flask_restx.api.Api` appending of swagger documentation `Api._register_doc` after Api is bound to
+  flask app or blueprint.
 
 ## [0.0.0] - 2022-08-26
 
