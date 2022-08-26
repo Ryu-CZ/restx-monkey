@@ -19,6 +19,8 @@ class Argument(flask_restx.reqparse.Argument):
         :param request: The flask request object to parse arguments from
         """
         if isinstance(self.location, str):
+            if not request.is_json and self.location == "json":
+                return MultiDict()
             value = getattr(request, self.location, MultiDict())
             if callable(value):
                 value = value()
