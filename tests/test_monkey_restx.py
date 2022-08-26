@@ -43,6 +43,19 @@ class MonkeyTest(unittest.TestCase):
             warn_register = warn
         self.assertIsNone(warn_register)
 
+    def test_parse_rule(self):
+        from monkey.werkzeug_routing import parse_rule
+        self.assertEqual(
+            tuple(parse_rule("https://www.google.com/api/<int:version>/index.json?val=3")),
+            ((None, None, 'https://www.google.com/api/'), ('int', None, 'version'), (None, None, '/index.json?val=3'))
+        )
+        with self.assertRaises(ValueError):
+            tuple(parse_rule("https://www.google.com/api/<int:version>/<int:version>/index.json?val=3"))
+        with self.assertRaises(ValueError):
+            tuple(parse_rule("https://www.google.com/api/<int:version>/<string:version>/index.json?val=3"))
+        with self.assertRaises(ValueError):
+            tuple(parse_rule("https://www.google.com/api/<int:version>>/index.json?val=3")),
+
 
 if __name__ == '__main__':
     unittest.main()
