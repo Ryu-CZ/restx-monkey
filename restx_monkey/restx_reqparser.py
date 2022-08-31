@@ -15,9 +15,9 @@ class Argument(flask_restx.reqparse.Argument):
 
     @property
     def __schema__(self):
-        param_ = super(Argument, self).__schema__()
+        param_ = super(Argument, self).__schema__
         if param_ and self.action == "append":
-            # badly placed patter of lists
+            # fixes badly placed patter of lists
             param_["items"]["pattern"] = param_["pattern"]
             _ = param_.pop("pattern", None)
         return param_
@@ -29,16 +29,17 @@ class Argument(flask_restx.reqparse.Argument):
         """
         if isinstance(self.location, str):
             if not request.is_json and self.location == "json":
+                # fixes problem with new flask.Request json in GET request types
                 return MultiDict()
             value = getattr(request, self.location, MultiDict())
             if callable(value):
                 value = value()
-            if value is not None:
-                return value
+            return value if value is not None else MultiDict()
         else:
             values = MultiDict()
             locations = list(self.location)
             if not request.is_json and "json" in locations:
+                # fixes problem with new flask.Request json in GET request types
                 locations.remove("json")
             for _location in locations:
                 value = getattr(request, _location, None)
@@ -47,8 +48,6 @@ class Argument(flask_restx.reqparse.Argument):
                 if value is not None:
                     values.update(value)
             return values
-
-        return MultiDict()
 
 
 A_ = typing.TypeVar('A_', bound=flask_restx.reqparse.Argument)

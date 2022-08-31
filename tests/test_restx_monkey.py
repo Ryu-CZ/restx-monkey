@@ -64,15 +64,17 @@ class MonkeyTest(unittest.TestCase):
         import flask_restx
         bp = flask.Blueprint("bp_test", __name__)
         api = flask_restx.Api(bp, title="test parser")
-        @api.route("/catcher")
+
+        @api.route("/json_catcher")
         class Catcher(flask_restx.Resource):
 
-            def post(self):
-                print("catcher")
+            @staticmethod
+            def post():
                 return {"return": 1}
 
         app = flask.Flask(__name__)
         app.register_blueprint(bp)
+        _ = Catcher
 
         args_parser = flask_restx.reqparse.RequestParser()
         args_parser.add_argument("test", type=int, location=("json", "args",))
@@ -88,11 +90,43 @@ class MonkeyTest(unittest.TestCase):
         self.assertIn("test", json_data)
         self.assertEqual(json_data["test"], 2)
 
+        multi_location_args_parser = flask_restx.reqparse.RequestParser()
+        multi_location_args_parser.add_argument("test", type=int, location=("json",))
+        with app.test_request_context("/json_catcher", method="POST"):
+            multi_loc_data = multi_location_args_parser.parse_args()
+        self.assertIsNone(multi_loc_data.get("test"))
+
         bad_args_parser = flask_restx.reqparse.RequestParser()
         bad_args_parser.add_argument("test", type=int, location="json")
         with app.test_request_context("/json_catcher?test=2", method="POST"):
             bad_args_data = bad_args_parser.parse_args()
         self.assertIsNone(bad_args_data.get("test"))
+
+        callable_args_parser = flask_restx.reqparse.RequestParser()
+        callable_args_parser.add_argument("test", type=int, location="get_json")
+        with app.test_request_context("/json_catcher", method="POST", json={"test": 2}):
+            json_data = callable_args_parser.parse_args()
+        self.assertIn("test", json_data)
+        self.assertEqual(json_data["test"], 2)
+
+        callable_args_parser = flask_restx.reqparse.RequestParser()
+        callable_args_parser.add_argument("test", type=int, location=("args", "get_json"))
+        with app.test_request_context("/json_catcher", method="POST", json={"test": 2}):
+            json_data = callable_args_parser.parse_args()
+        self.assertIn("test", json_data)
+        self.assertEqual(json_data["test"], 2)
+
+        list_parser = flask_restx.reqparse.RequestParser()
+        list_parser.add_argument(
+            'tag',
+            location='args',
+            type=flask_restx.inputs.regex('^[-_a-zA-Z0-9]+$'),
+            action='append',
+            default='',
+            help='Filters obj tagged with the provided tags',
+        )
+        tag_schema = list_parser.args[0].__schema__
+        self.assertEqual(tag_schema["items"].get("pattern"), "^[-_a-zA-Z0-9]+$")
 
 
 if __name__ == '__main__':
