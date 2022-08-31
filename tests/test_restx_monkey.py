@@ -10,21 +10,21 @@ RESTX_PKG_NAME = "flask_restx"
 class MonkeyTest(unittest.TestCase):
 
     def test_get_version(self):
-        import monkey
-        self.assertIsNotNone(monkey.get_version("pip"))
-        self.assertIsNone(monkey.get_version("the-test-mumble_jumble"))
+        import restx_monkey
+        self.assertIsNotNone(restx_monkey.get_version("pip"))
+        self.assertIsNone(restx_monkey.get_version("the-test-mumble_jumble"))
 
     def test_restx_import(self):
         """check if restx can be import without errors"""
-        import monkey
-        monkey.patch_restx(replace_parse_rule=True, fix_restx_api=False, fix_restx_parser=False)
+        import restx_monkey
+        restx_monkey.patch_restx(replace_parse_rule=True, fix_restx_api=False, fix_restx_parser=False)
         _ = __import__(RESTX_PKG_NAME)
         self.assertIn(RESTX_PKG_NAME, sys.modules)
 
     def test_fix_restx_api(self):
         """check if flask_restx.api.Api works"""
-        import monkey
-        monkey.patch_restx(replace_parse_rule=True, fix_restx_api=True, fix_restx_parser=False)
+        import restx_monkey
+        restx_monkey.patch_restx(replace_parse_rule=True, fix_restx_api=True, fix_restx_parser=False)
         import flask_restx
         import flask
         warnings.filterwarnings("error")
@@ -46,7 +46,7 @@ class MonkeyTest(unittest.TestCase):
         self.assertIsNone(warn_register)
 
     def test_parse_rule(self):
-        from monkey.werkzeug_routing import parse_rule
+        from restx_monkey.werkzeug_routing import parse_rule
         self.assertEqual(
             tuple(parse_rule("https://www.google.com/api/<int:version>/index.json?val=3")),
             ((None, None, 'https://www.google.com/api/'), ('int', None, 'version'), (None, None, '/index.json?val=3'))
@@ -59,8 +59,8 @@ class MonkeyTest(unittest.TestCase):
             tuple(parse_rule("https://www.google.com/api/<int:version>>/index.json?val=3")),
 
     def test_restx_req_parser(self):
-        import monkey
-        monkey.patch_restx(replace_parse_rule=True, fix_restx_api=True, fix_restx_parser=True)
+        import restx_monkey
+        restx_monkey.patch_restx(replace_parse_rule=True, fix_restx_api=True, fix_restx_parser=True)
         import flask_restx
         bp = flask.Blueprint("bp_test", __name__)
         api = flask_restx.Api(bp, title="test parser")

@@ -8,31 +8,31 @@ restx compatible with the latest [flask](https://github.com/pallets/flask) and [
 Clone repository and copy monkey module to your project or use it as submodule.
 
 ```shell
-git clone git@github.com:Ryu-CZ/restx-monkey.git  
+pip install restx-monkey
 ```
 
 Before importing `flask-restx` apply all patches
 
 ```python
-from . import monkey
+import restx_monkey as monkey
 
 monkey.patch_restx()
 
-...
+# after patch import other modules 
 import flask_restx
-...
+# your other code
 ```
 
-or select which patches you dont want to apply
+or select which patches you do not want to apply
 
 ```python
-from . import monkey
+import restx_monkey as monkey
 
 monkey.patch_restx(fix_restx_api=False)
 
-...
+# after patch import other modules 
 import flask_restx
-...
+# your other code
 ```
 
 ## Goal of project
