@@ -5,10 +5,10 @@ restx compatible with the latest [flask](https://github.com/pallets/flask) and [
 
 ### Usage
 
-Clone repository and copy monkey module to your project or use it as submodule.
+Install from pip repository.
 
 ```shell
-pip install restx-monkey
+python3 -m pip install --user restx-monkey
 ```
 
 Before importing `flask-restx` apply all patches
