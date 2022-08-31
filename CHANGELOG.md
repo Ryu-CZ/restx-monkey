@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Release project to [pypi](https://pypi.org/project/restx-monkey/)
 - Patch `flask_restx.reqparse.Argument` failing on `json` location when there is no `request` json body.
 
 ## [0.1.0] - 2022-08-26
