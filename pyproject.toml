@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "restx-monkey"
-version = "0.2.0"
+version = "0.2.1"
 authors = [
     { name = " Tom Trval", email = "thandeus@gmail.com" },
 ]

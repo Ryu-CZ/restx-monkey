@@ -2,7 +2,7 @@ import typing
 
 import pkg_resources
 
-_version = (0, 2, 0)
+_version = (0, 2, 1)
 __version__ = ".".join(map(str, _version))
 
 __all__ = (

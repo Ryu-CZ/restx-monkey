@@ -7,10 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### Added
+## [0.2.1] - 2022-08-31
 
-- Patch [pattern is properly set on list objects](https://github.com/python-restx/flask-restx/pull/453), thx to
+### Modify
+
+- Extend `reqparse` patch to [pattern is properly set on list objects](https://github.com/python-restx/flask-restx/pull/453), thanks to
   alexissavin for noticing this.
+- Better test coverage to 100%.
 
 ## [0.2.0] - 2022-08-31
 
