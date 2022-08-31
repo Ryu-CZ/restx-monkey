@@ -1,7 +1,7 @@
 # restx-monkey
 
-Monkey patches for unmaintained [flask-restx](https://github.com/python-restx/flask-restx) python package to keep it
-restx compatible with the latest [flask](https://github.com/pallets/flask) and [werkzeug](https://github.com/pallets/werkzeug).
+Monkey patches for unmaintained [flask-restx](https://github.com/python-restx/flask-restx) python package to keep
+your installation of flask-restx compatible with the latest [flask](https://github.com/pallets/flask) and [werkzeug](https://github.com/pallets/werkzeug).
 
 ### Usage
 
