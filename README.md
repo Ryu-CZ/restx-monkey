@@ -5,15 +5,16 @@ restx compatible with the latest [flask](https://github.com/pallets/flask) and [
 
 ### Usage
 
-Install from pip repository.
+To install restx_monkey, use [pip](https://pip.pypa.io/en/stable/):
 
 ```shell
-python3 -m pip install --user restx-monkey
+pip install -U restx-monkey
 ```
 
-Before importing `flask-restx` apply all patches
+Before importing `flask-restx` apply all patches in your main module:
 
 ```python
+# app main file
 import restx_monkey as monkey
 
 monkey.patch_restx()
@@ -26,6 +27,7 @@ import flask_restx
 or select which patches you do not want to apply
 
 ```python
+# app main file
 import restx_monkey as monkey
 
 monkey.patch_restx(fix_restx_api=False)
