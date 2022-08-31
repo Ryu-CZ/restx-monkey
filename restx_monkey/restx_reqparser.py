@@ -13,6 +13,15 @@ __all__ = (
 
 class Argument(flask_restx.reqparse.Argument):
 
+    @property
+    def __schema__(self):
+        param_ = super(Argument, self).__schema__()
+        if param_ and self.action == "append":
+            # badly placed patter of lists
+            param_["items"]["pattern"] = param_["pattern"]
+            _ = param_.pop("pattern", None)
+        return param_
+
     def source(self, request: flask.Request) -> typing.Any:
         """
         Pulls values off the request in the provided location

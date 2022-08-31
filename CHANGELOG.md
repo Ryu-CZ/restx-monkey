@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Patch [pattern is properly set on list objects](https://github.com/python-restx/flask-restx/pull/453), thx to
+  alexissavin for noticing this.
+
 ## [0.2.0] - 2022-08-31
 
 ### Added
