@@ -2,8 +2,8 @@ import typing
 
 import pkg_resources
 
-_version = (0, 2, 1)
-__version__ = ".".join(map(str, _version))
+VERSION = (0, 2, 1)
+__version__ = ".".join(map(str, VERSION))
 
 __all__ = (
     "patch_restx",

@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "restx-monkey"
-version = "0.2.1"
+dynamic = ["version", ]
 authors = [
-    { name = " Tom Trval", email = "thandeus@gmail.com" },
+    { name = "Tom Trval", email = "thandeus@gmail.com" },
 ]
 description = "Monkey patches to keep flask-restx working with latest flask and werkzeug."
 readme = "README.md"
-license = { text = "GPLv3" }
+license = { text = "GNU General Public License v3 (GPLv3)" }
 requires-python = ">=3.7"
 dependencies = [
     'flask-restx',
@@ -45,12 +45,16 @@ classifiers = [
 test_suite = "tests"
 
 [tool.setuptools]
-packages = ["restx_monkey"]
+package-dir = {"" = "src"}
+packages = ["restx_monkey", ]
+
+[tool.setuptools.dynamic]
+version = {attr = "restx_monkey.__version__"}
 
 [coverage.run]
 branch = true
 source = [
-    "restx_monkey",
+    "src/restx_monkey",
     "tests",
 ]
 
