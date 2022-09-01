@@ -11,20 +11,20 @@ sys.path.append('../src')
 class MonkeyTest(unittest.TestCase):
 
     def test_get_version(self):
-        from src import restx_monkey
+        import restx_monkey
         self.assertIsNotNone(restx_monkey.get_version("pip"))
         self.assertIsNone(restx_monkey.get_version("the-test-mumble_jumble"))
 
     def test_restx_import(self):
         """check if restx can be import without errors"""
-        from src import restx_monkey
+        import restx_monkey
         restx_monkey.patch_restx(replace_parse_rule=True, fix_restx_api=False, fix_restx_parser=False)
         _ = __import__(RESTX_PKG_NAME)
         self.assertIn(RESTX_PKG_NAME, sys.modules)
 
     def test_fix_restx_api(self):
         """check if flask_restx.api.Api works"""
-        from src import restx_monkey
+        import restx_monkey
         restx_monkey.patch_restx(replace_parse_rule=True, fix_restx_api=True, fix_restx_parser=False)
         import flask_restx
         import flask
@@ -60,7 +60,7 @@ class MonkeyTest(unittest.TestCase):
             tuple(parse_rule("https://www.google.com/api/<int:version>>/index.json?val=3")),
 
     def test_restx_req_parser(self):
-        from src import restx_monkey
+        import restx_monkey
         restx_monkey.patch_restx(replace_parse_rule=True, fix_restx_api=True, fix_restx_parser=True)
         import flask_restx
         bp = flask.Blueprint("bp_test", __name__)
