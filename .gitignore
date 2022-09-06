@@ -123,6 +123,12 @@ venv.bak/
 # mkdocs documentation
 /site
 
+# npm installs
+/node_modules
+package*.json
+
+/src/restx_monkey/static*
+
 # mypy
 .mypy_cache/
 .dmypy.json

@@ -129,6 +129,10 @@ class MonkeyTest(unittest.TestCase):
         tag_schema = list_parser.args[0].__schema__
         self.assertEqual(tag_schema["items"].get("pattern"), "^[-_a-zA-Z0-9]+$")
 
+    def test_restx_req_parser(self):
+        import restx_monkey
+        restx_monkey.patch_restx(replace_parse_rule=True, fix_restx_api=True, update_swagger_ui=True)
+
 
 if __name__ == '__main__':
     unittest.main()

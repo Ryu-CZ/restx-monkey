@@ -1,8 +1,9 @@
+import pathlib
 import typing
 
 import pkg_resources
 
-VERSION = (0, 2, 1)
+VERSION = (0, 3, 0)
 __version__ = ".".join(map(str, VERSION))
 
 __all__ = (
@@ -33,6 +34,7 @@ def patch_restx(
         replace_parse_rule: bool = True,
         fix_restx_api: bool = True,
         fix_restx_parser: bool = True,
+        update_swagger_ui: bool = True,
 ) -> None:
     """
     Monkey patch unmaintained `flask-restx`. This has a hidden side effects!!! See params bellow.
@@ -40,6 +42,7 @@ def patch_restx(
     :param replace_parse_rule: Patch werkzeug because `flask-restx` is not compatible with latest `werkzeug`
     :param fix_restx_api: fix deprecated `flask-restx.api.Api` init of `doc` endpoints after blueprint is bound
     :param fix_restx_parser: replace failing `flask_restx.reqparse.Argument` class with fixed one
+    :param update_swagger_ui: replace swagger UI source files with new version
     """
     global _original_restx_api, _injected_werkzeug_routing, _original_argument_cls, _original_parser_cls
 
@@ -69,3 +72,41 @@ def patch_restx(
         _original_parser_cls = flask_restx.reqparse.RequestParser
         flask_restx.reqparse.Argument = restx_reqparser.Argument
         flask_restx.reqparse.RequestParser = restx_reqparser.RequestParser
+
+    if update_swagger_ui and is_incompatible:
+        import flask_restx
+        my_static = pathlib.Path(__file__).parent / "static"
+        my_static_files = my_static / "files"
+        lib_static = pathlib.Path(flask_restx.__file__).parent / "static"
+        lib_static_files = lib_static / "files"
+
+        # create missing
+        for folder in (lib_static, lib_static_files):
+            if not folder.exists():
+                try:
+                    folder.mkdir()
+                except PermissionError:
+                    pass
+        # replace old files in static
+        for my_path in my_static.iterdir():
+            if my_path.is_file():
+                try:
+                    my_path.replace(lib_static/my_path.name)
+                except PermissionError:
+                    pass
+
+        # replace old font files with new
+        for my_path in my_static_files.iterdir():
+            if my_path.is_file():
+                try:
+                    my_path.replace(lib_static_files/my_path.name)
+                except PermissionError:
+                    pass
+
+
+def main():
+    patch_restx()
+
+
+if __name__ == "__main__":
+    main()
