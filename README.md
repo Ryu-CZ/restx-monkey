@@ -1,7 +1,8 @@
 # Restx-Monkey
 
 Monkey patches for unmaintained [flask-restx](https://github.com/python-restx/flask-restx) python package to keep
-your installation of flask-restx compatible with the latest [flask](https://github.com/pallets/flask) and [werkzeug](https://github.com/pallets/werkzeug).
+your installation of flask-restx compatible with the latest [flask](https://github.com/pallets/flask)
+and [werkzeug](https://github.com/pallets/werkzeug).
 
 ## Installation
 
@@ -39,11 +40,23 @@ import flask_restx
 # your other code
 ```
 
+### What is patched?
+
+Here is list of patches applied to [flask-restx](https://github.com/python-restx/flask-restx) package by this monkey:
+
+- _replace_parse_rule_ - injects `parse_rule` method into werkzeug because `flask-restx` is using this internal method
+- _fix_restx_api_ - fix deprecated `flask-restx.api.Api` init of `doc` endpoints after blueprint is bound
+- _fix_restx_parser_ - replace failing `flask_restx.reqparse.Argument` class with child whom can correctly handle `json`
+  location of argument in `flask.Request` even in HTTP `GET` callback
+
 ## Goal of project
 
-Keep [flask-restx](https://github.com/python-restx/flask-restx) compatible with the latest [flask](https://github.com/pallets/flask) and [werkzeug](https://github.com/pallets/werkzeug) as long as it is reasonable simple to monkey patch it.
+Keep [flask-restx](https://github.com/python-restx/flask-restx) compatible with the
+latest [flask](https://github.com/pallets/flask) and [werkzeug](https://github.com/pallets/werkzeug) as long as it is
+reasonable simple to monkey patch it.
 
 ### What this project is not
 
-This project does not solve incompatibilities of other python packages using [flask-restx](https://github.com/python-restx/flask-restx).
+This project does not solve incompatibilities of other python packages
+using [flask-restx](https://github.com/python-restx/flask-restx).
 
