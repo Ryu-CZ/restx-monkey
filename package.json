@@ -1,13 +1,13 @@
 {
-  "name": "flask-restx",
-  "version": "0.5.1-dev1",
-  "description": "Fully featured framework for fast, easy and documented API development with Flask",
-  "repository": "python-restx/flask-restx",
+  "name": "restx-monkey",
+  "version": "0.3.1",
+  "description": "Monkey patches for unmaintained flask-restx python package.",
+  "repository": "Ryu-CZ/restx-monkey",
   "keywords": [
     "swagger",
     "flask"
   ],
-  "author": "python-restx authors",
+  "author": "Ryu-CZ",
   "license": "BSD-3-Clause",
   "dependencies": {
     "swagger-ui-dist": "^4.14.0",
