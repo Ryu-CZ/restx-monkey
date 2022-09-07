@@ -3,7 +3,6 @@ import os
 import pathlib
 import typing
 
-
 __all__ = (
     "is_writable",
     "replace_static_swagger_files",
@@ -31,22 +30,14 @@ def replace_static_swagger_files(target_folder: typing.Union[pathlib.Path, str, 
     """
     import flask_restx
     my_static = pathlib.Path(__file__).parent / "static"
-    my_static_files = my_static / "files"
     lib_static = pathlib.Path(target_folder) if target_folder else pathlib.Path(flask_restx.__file__).parent / "static"
-    lib_static_files = lib_static / "files"
-
-    # create missing
-    for folder in (lib_static_files, ):
-        if folder.parent.exists():
-            folder.mkdir(exist_ok=True)
 
     has_permissions = all(
         map(
             is_writable,
             itertools.chain(
-                (lib_static, ),
+                (lib_static,),
                 lib_static.iterdir(),
-                lib_static_files.iterdir(),
             )
         )
     )
@@ -58,8 +49,3 @@ def replace_static_swagger_files(target_folder: typing.Union[pathlib.Path, str, 
     for src_path in my_static.iterdir():
         if src_path.is_file():
             (lib_static / src_path.name).write_bytes(src_path.read_bytes())
-
-    # replace old font files with new
-    for src_path in my_static_files.iterdir():
-        if src_path.is_file():
-            (lib_static_files / src_path.name).write_bytes(src_path.read_bytes())

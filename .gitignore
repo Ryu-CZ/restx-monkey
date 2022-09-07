@@ -125,7 +125,7 @@ venv.bak/
 
 # npm installs
 /node_modules
-package*.json
+*-lock.json
 
 /src/restx_monkey/static*
 

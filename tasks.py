@@ -3,6 +3,7 @@ from __future__ import unicode_literals, absolute_import
 
 import os
 import sys
+import pathlib
 
 from invoke import task
 
@@ -61,16 +62,17 @@ def assets(ctx):
     static_folder = "./src/restx_monkey/static"
     with ctx.cd(ROOT):
         ctx.run("npm install")
+        ctx.run(f"rm -rf {static_folder}")
         ctx.run(f"mkdir -p {static_folder}")
         ctx.run(
             "cp node_modules/swagger-ui-dist/{swagger-ui*.{css,js}{,.map},favicon*.png,oauth2-redirect.html} " + static_folder
         )
         # Until next release we need to install droid sans separately
-        # Until next release we need to install droid sans separately
         ctx.run(
             f"cp node_modules/typeface-droid-sans/index.css {static_folder}/droid-sans.css"
         )
-        ctx.run(f"cp -R node_modules/typeface-droid-sans/files {static_folder}")
+        if pathlib.Path("./node_modules/typeface-droid-sans/files").exists():
+            ctx.run(f"cp -R node_modules/typeface-droid-sans/files {static_folder}")
 
 
 @task(clean, assets, default=True)
