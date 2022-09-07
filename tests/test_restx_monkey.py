@@ -1,6 +1,8 @@
 import sys
 import unittest
 import warnings
+import shutil
+import pathlib
 
 import flask
 
@@ -129,9 +131,36 @@ class MonkeyTest(unittest.TestCase):
         tag_schema = list_parser.args[0].__schema__
         self.assertEqual(tag_schema["items"].get("pattern"), "^[-_a-zA-Z0-9]+$")
 
-    def test_restx_req_parser(self):
+    def test_swagger_replace(self):
         import restx_monkey
-        restx_monkey.patch_restx(replace_parse_rule=True, fix_restx_api=True, update_swagger_ui=True)
+        from restx_monkey.swagger_ui import is_writable
+        self.assertFalse(is_writable("/root"))
+        self.assertTrue(is_writable(__file__))
+        # optimal scenario works
+        os_error = None
+        try:
+            restx_monkey.patch_restx(replace_parse_rule=True, fix_restx_api=True, update_swagger_ui=True)
+        except OSError as e:
+            os_error = e
+        self.assertIsNone(os_error)
+        # skip on no permission
+        os_error = None
+        try:
+            restx_monkey.swagger_ui.replace_static_swagger_files("/root/blabla")
+        except OSError as e:
+            os_error = e
+        self.assertIsNone(os_error)
+        os_error = None
+        # create missing `file` dir
+        tmp_static = pathlib.Path(__file__).parent / "__tmp_static__"
+        try:
+            tmp_static.mkdir(exist_ok=True)
+            restx_monkey.swagger_ui.replace_static_swagger_files(tmp_static)
+        except OSError as e:
+            os_error = e
+        finally:
+            shutil.rmtree(str(tmp_static), ignore_errors=True)
+        self.assertIsNone(os_error)
 
 
 if __name__ == '__main__':
