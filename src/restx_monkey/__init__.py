@@ -25,7 +25,7 @@ def get_version(pkg: str) -> typing.Union[typing.Tuple, None]:
     """
     packages = pkg_resources.working_set.by_key
     if pkg not in packages:
-      ## [0.2.1] - 2022-08-31  return None
+        return None
     return tuple(map(int, packages[pkg].version.split(".")))
 
 
