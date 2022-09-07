@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.3.1] - 2022-09-07
+
+### Modify
+
+- Use latest droid fonts for Swagger UI.
+
 ## [0.3.0] - 2022-09-07
 
 ### Added
