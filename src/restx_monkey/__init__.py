@@ -13,6 +13,7 @@ _original_restx_api = None
 _injected_werkzeug_routing = False
 _original_argument_cls = None
 _original_parser_cls = None
+_swagger_ui_is_replaced = False
 
 
 def get_version(pkg: str) -> typing.Union[typing.Tuple, None]:
@@ -24,7 +25,7 @@ def get_version(pkg: str) -> typing.Union[typing.Tuple, None]:
     """
     packages = pkg_resources.working_set.by_key
     if pkg not in packages:
-        return None
+      ## [0.2.1] - 2022-08-31  return None
     return tuple(map(int, packages[pkg].version.split(".")))
 
 
@@ -43,7 +44,7 @@ def patch_restx(
     :param fix_restx_parser: replace failing `flask_restx.reqparse.Argument` class with fixed one
     :param update_swagger_ui: replace swagger UI source files with new version
     """
-    global _original_restx_api, _injected_werkzeug_routing, _original_argument_cls, _original_parser_cls
+    global _original_restx_api, _injected_werkzeug_routing, _original_argument_cls, _original_parser_cls, _swagger_ui_is_replaced
 
     is_incompatible = get_version("flask") >= (2, 2, 0) and get_version("flask-restx") < (0, 6, 0)
     if replace_parse_rule and is_incompatible and not _injected_werkzeug_routing:
@@ -72,6 +73,7 @@ def patch_restx(
         flask_restx.reqparse.Argument = restx_reqparser.Argument
         flask_restx.reqparse.RequestParser = restx_reqparser.RequestParser
 
-    if update_swagger_ui and is_incompatible:
+    if update_swagger_ui and is_incompatible and not _swagger_ui_is_replaced:
         from . import swagger_ui
         swagger_ui.replace_static_swagger_files()
+        _swagger_ui_is_replaced = True
