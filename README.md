@@ -48,7 +48,7 @@ Here is list of patches applied to [flask-restx](https://github.com/python-restx
 - _fix_restx_api_ - fix deprecated `flask-restx.api.Api` init of `doc` endpoints after blueprint is bound
 - _fix_restx_parser_ - replace failing `flask_restx.reqparse.Argument` class with child whom can correctly handle `json`
   location of argument in `flask.Request` even in HTTP `GET` callback
-- _update_swagger_ui_ - replace failing `flask_restx.static` directory with the latest swagger UI
+- _update_swagger_ui_ - replace content of `flask_restx.static` directory with the latest swagger UI
 
 ## Goal of project
 
