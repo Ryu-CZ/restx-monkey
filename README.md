@@ -4,6 +4,8 @@ Monkey patches for unmaintained [flask-restx](https://github.com/python-restx/fl
 your installation of flask-restx compatible with the latest [flask](https://github.com/pallets/flask)
 and [werkzeug](https://github.com/pallets/werkzeug).
 
+![example workflow](https://github.com/Ryu-CZ/restx-monkey/actions/workflows/release/badge.svg?branch=master)
+
 ## Installation
 
 To install restx_monkey, use [pip](https://pip.pypa.io/en/stable/):
