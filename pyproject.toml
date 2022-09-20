@@ -13,7 +13,7 @@ readme = "README.md"
 license = { text = "BSD-3-Clause" }
 requires-python = ">=3.7"
 dependencies = [
-    'flask-restx',
+    'flask-restx>=0.1',
 ]
 keywords = [
     "restx",
