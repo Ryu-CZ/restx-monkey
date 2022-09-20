@@ -10,10 +10,10 @@ authors = [
 ]
 description = "Monkey patches to keep flask-restx working with latest flask and werkzeug."
 readme = "README.md"
-license = { text = "GNU General Public License v3 (GPLv3)" }
+license = { text = "BSD-3-Clause" }
 requires-python = ">=3.7"
 dependencies = [
-    'flask-restx',
+    'flask-restx>=0.1',
 ]
 keywords = [
     "restx",
@@ -27,7 +27,7 @@ keywords = [
     "python",
 ]
 classifiers = [
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",

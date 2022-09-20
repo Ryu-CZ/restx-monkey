@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.4.0] - 2022-09-20
+
+### Changed
+
+- Set LICENSE to _BSD-3-Clause_.
+
 ## [0.3.1] - 2022-09-07
 
-### Modify
+### Changed
 
 - Use latest droid fonts for Swagger UI.
 
@@ -21,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.2.1] - 2022-08-31
 
-### Modify
+### Changed
 
 - Extend `reqparse` patch to [pattern is properly set on list objects](https://github.com/python-restx/flask-restx/pull/453), thanks to
   alexissavin for noticing this.
