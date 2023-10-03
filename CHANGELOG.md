@@ -22,7 +22,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - fixes error: `DeprecationWarning: jsonschema.RefResolver is deprecated`
 
 ### Changed
-- Separate `requirments-dev.txt` from basic requirments.
+
+- Separate `requirments-dev.txt` from basic requirements.
 
 ## [0.4.0] - 2022-09-20
 
