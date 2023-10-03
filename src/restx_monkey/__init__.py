@@ -1,40 +1,27 @@
-import typing
+from . import tools
 
-import pkg_resources
-
-VERSION = (0, 4, 0)
+VERSION = (0, 5, 0)
 __version__ = ".".join(map(str, VERSION))
 
-__all__ = (
-    "patch_restx",
-)
+__all__ = ("patch_restx",)
 
 _original_restx_api = None
 _injected_werkzeug_routing = False
 _original_argument_cls = None
 _original_parser_cls = None
 _swagger_ui_is_replaced = False
-
-
-def get_version(pkg: str) -> typing.Union[typing.Tuple, None]:
-    """
-    Parse package version as tuple for easy comparison.
-
-    :param pkg: package name
-    :return: version tuple of python package for easy comparison
-    """
-    packages = pkg_resources.working_set.by_key
-    if pkg not in packages:
-        return None
-    return tuple(map(int, packages[pkg].version.split(".")))
+versions_injected = False
+_original_endpoint_from_view_func = None
 
 
 # noinspection PyUnresolvedReferences
 def patch_restx(
-        replace_parse_rule: bool = True,
-        fix_restx_api: bool = True,
-        fix_restx_parser: bool = True,
-        update_swagger_ui: bool = True,
+    replace_parse_rule: bool = True,
+    fix_restx_api: bool = True,
+    fix_restx_parser: bool = True,
+    update_swagger_ui: bool = True,
+    fix_endpoint_from_view: bool = True,
+    inject_versions: bool = True,
 ) -> None:
     """
     Monkey patch unmaintained `flask-restx`. This has a hidden side effects!!! See params bellow.
@@ -43,37 +30,63 @@ def patch_restx(
     :param fix_restx_api: fix deprecated `flask-restx.api.Api` init of `doc` endpoints after blueprint is bound
     :param fix_restx_parser: replace failing `flask_restx.reqparse.Argument` class with fixed one
     :param update_swagger_ui: replace swagger UI source files with new version
+    :param fix_endpoint_from_view: inject `_endpoint_from_view_func` to `flask.helpers` because `flask` 3.0 moved it to `sansio`
+    :param inject_versions: flaks and werkzeug stopped using __version__attribute, put it back
     """
-    global _original_restx_api, _injected_werkzeug_routing, _original_argument_cls, _original_parser_cls, _swagger_ui_is_replaced
+    global _original_restx_api, _injected_werkzeug_routing, _original_argument_cls, _original_parser_cls, _swagger_ui_is_replaced, _original_endpoint_from_view_func
+    flask_version = tools.get_version("flask")
+    restx_version = tools.get_version("flask-restx")
 
-    is_incompatible = get_version("flask") >= (2, 2, 0) and get_version("flask-restx") < (0, 6, 0)
-    if replace_parse_rule and is_incompatible and not _injected_werkzeug_routing:
+    big_three_brake = flask_version >= (3, 0, 0) and restx_version < (1, 2, 0)
+    if inject_versions and big_three_brake and not versions_injected:
+        from . import version_system
+
+        version_system.inject_dunder_version()
+    if fix_endpoint_from_view and big_three_brake and not _original_endpoint_from_view_func:
+        import flask
+        from . import endpoint_from_view
+
+        _original_endpoint_from_view_func = endpoint_from_view.find_endpoint_parser()
+        if not hasattr(flask.helpers, "_endpoint_from_view_func"):
+            flask.helpers._endpoint_from_view_func = _original_endpoint_from_view_func
+        if hasattr(flask, "scaffold"):
+            flask.scaffold._endpoint_from_view_func = _original_endpoint_from_view_func
+
+    is_incompatible = flask_version >= (2, 2, 0) and restx_version < (0, 6, 0)
+    if not is_incompatible:
+        return
+    if replace_parse_rule and not _injected_werkzeug_routing:
         import werkzeug
         import werkzeug.routing
         from . import werkzeug_routing
+
         if not hasattr(werkzeug.routing, "parse_rule"):
             werkzeug.routing.parse_rule = werkzeug_routing.parse_rule
         _injected_werkzeug_routing = True
         # noinspection PyUnresolvedReferences
         from werkzeug.routing import parse_rule as test_rule
+
         _ = test_rule
 
-    if fix_restx_api and _original_restx_api is None and is_incompatible:
+    if fix_restx_api and _original_restx_api is None:
         from . import restx_api
         import flask_restx
+
         _original_restx_api = flask_restx.api.Api
         flask_restx.api.Api = restx_api.ApiWrapper
         flask_restx.Api = restx_api.ApiWrapper
 
-    if fix_restx_parser and is_incompatible and _original_argument_cls is None and _original_parser_cls is None:
+    if fix_restx_parser and _original_argument_cls is None and _original_parser_cls is None:
         from . import restx_reqparser
         import flask_restx
+
         _original_argument_cls = flask_restx.reqparse.Argument
         _original_parser_cls = flask_restx.reqparse.RequestParser
         flask_restx.reqparse.Argument = restx_reqparser.Argument
         flask_restx.reqparse.RequestParser = restx_reqparser.RequestParser
 
-    if update_swagger_ui and is_incompatible and not _swagger_ui_is_replaced:
+    if update_swagger_ui and not _swagger_ui_is_replaced:
         from . import swagger_ui
+
         swagger_ui.replace_static_swagger_files()
         _swagger_ui_is_replaced = True

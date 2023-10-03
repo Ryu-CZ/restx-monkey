@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- fix_endpoint_from_view: bool = True,
+ -inject_versions: bool = True,
+
 ## [0.4.0] - 2022-09-20
 
 ### Changed
