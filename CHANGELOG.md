@@ -11,8 +11,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- fix_endpoint_from_view: bool = True,
- -inject_versions: bool = True,
+- New `flask` and `werkzeug` `3.0+` patches.
+
+- Introduced switch`fix_endpoint_from_view=True`:
+  - inject `_endpoint_from_view_func` to `flask.helpers` because `flask` 3.0 moved it
+  - fixes error: `ModuleNotFoundError: No module named 'flask.scaffold'` 
+  
+- Introduced switch `inject_versions=True`:
+  - put back missing `__version__` to flask and werkzeug; original error
+  - fixes error: `DeprecationWarning: jsonschema.RefResolver is deprecated`
+
+### Changed
+- Separate `requirments-dev.txt` from basic requirments.
 
 ## [0.4.0] - 2022-09-20
 

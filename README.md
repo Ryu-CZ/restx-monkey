@@ -65,3 +65,51 @@ reasonable simple to monkey patch it.
 This project does not solve incompatibilities of other python packages
 using [flask-restx](https://github.com/python-restx/flask-restx).
 
+
+## Tests
+
+You can run tests with coverage tracing:
+
+```shell
+python -m coverage run -m unittest tests/test_* -v 
+```
+
+To generate coverage report:
+
+```shell
+python -m coverage html   
+```
+
+## Build
+
+Clone repo and set up your pypi repo account credentials on build for build environment.
+
+- Move to package repo:
+
+    ```shell
+    cd ~/git/restx_monkey
+    ```
+
+- Install requirements:
+
+   ```shell
+   python -m pip install -Ur requirements.txt
+   ```
+
+- Clean old build fragments:
+
+    ```shell
+    rm -rf ./dist ./build ./src/restx_monkey.egg-info
+    ```
+
+- Build new package:
+
+    ```shell
+    python -m build
+    ``` 
+
+- Upload new package:
+
+    ```shell
+    python -m twine upload dist/* 
+    ```

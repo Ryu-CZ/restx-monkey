@@ -19,6 +19,7 @@ CLEAN_PATTERNS = [
     "**/__pycache__",
     "reports",
     "*.egg-info",
+    "src/*.egg-info",
 ]
 
 
@@ -65,12 +66,11 @@ def assets(ctx):
         ctx.run(f"rm -rf {static_folder}")
         ctx.run(f"mkdir -p {static_folder}")
         ctx.run(
-            "cp node_modules/swagger-ui-dist/{swagger-ui*.{css,js}{,.map},favicon*.png,oauth2-redirect.html} " + static_folder
+            "cp node_modules/swagger-ui-dist/{swagger-ui*.{css,js}{,.map},favicon*.png,oauth2-redirect.html} "
+            + static_folder
         )
         # Until next release we need to install droid sans separately
-        ctx.run(
-            f"cp node_modules/typeface-droid-sans/index.css {static_folder}/droid-sans.css"
-        )
+        ctx.run(f"cp node_modules/typeface-droid-sans/index.css {static_folder}/droid-sans.css")
         if pathlib.Path("./node_modules/typeface-droid-sans/files").exists():
             ctx.run(f"cp -R node_modules/typeface-droid-sans/files {static_folder}")
 
