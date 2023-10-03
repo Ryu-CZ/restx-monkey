@@ -4,7 +4,7 @@ Monkey patches for unmaintained [flask-restx](https://github.com/python-restx/fl
 your installation of flask-restx compatible with the latest [flask](https://github.com/pallets/flask)
 and [werkzeug](https://github.com/pallets/werkzeug).
 
-![example workflow](https://github.com/Ryu-CZ/restx-monkey/actions/workflows/release/badge.svg?branch=master)
+**Good NEWS everyone!** Package [flask-restx](https://github.com/python-restx/flask-restx) is maintained now! I strongly suggest to submit issues on official project [issues page](https://github.com/python-restx/flask-restx/issues).
 
 ## Installation
 
@@ -50,7 +50,9 @@ Here is list of patches applied to [flask-restx](https://github.com/python-restx
 - _fix_restx_api_ - fix deprecated `flask-restx.api.Api` init of `doc` endpoints after blueprint is bound
 - _fix_restx_parser_ - replace failing `flask_restx.reqparse.Argument` class with child whom can correctly handle `json`
   location of argument in `flask.Request` even in HTTP `GET` callback
-- _update_swagger_ui_ - replace content of `flask_restx.static` directory with the latest swagger UI
+- _update_swagger_ui_ - replace content of `flask_restx.static` directory with the later swagger UI then restx < 1.0
+- _fix_endpoint_from_view_ - fix `flask.scaffold` missing `_endpoint_from_view_func`
+- _inject_versions_ - puts back `__version__` to `flask` and `werkzeug` for `3.0+` where the version was removed 
 
 ## Goal of project
 
