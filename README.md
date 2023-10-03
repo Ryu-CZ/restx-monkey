@@ -11,7 +11,7 @@ and [werkzeug](https://github.com/pallets/werkzeug).
 To install restx_monkey, use [pip](https://pip.pypa.io/en/stable/):
 
 ```shell
-pip install -U restx-monkey
+python -m pip install -U restx-monkey
 ```
 
 ## Usage
