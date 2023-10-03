@@ -10,7 +10,7 @@ _injected_werkzeug_routing = False
 _original_argument_cls = None
 _original_parser_cls = None
 _swagger_ui_is_replaced = False
-versions_injected = False
+_versions_injected = False
 _original_endpoint_from_view_func = None
 
 
@@ -33,15 +33,16 @@ def patch_restx(
     :param fix_endpoint_from_view: inject `_endpoint_from_view_func` to `flask.helpers` because `flask` 3.0 moved it to `sansio`
     :param inject_versions: flaks and werkzeug stopped using __version__attribute, put it back
     """
-    global _original_restx_api, _injected_werkzeug_routing, _original_argument_cls, _original_parser_cls, _swagger_ui_is_replaced, _original_endpoint_from_view_func
+    global _original_restx_api, _injected_werkzeug_routing, _original_argument_cls, _original_parser_cls, _swagger_ui_is_replaced, _original_endpoint_from_view_func, _versions_injected
     flask_version = tools.get_version("flask")
     restx_version = tools.get_version("flask-restx")
 
     big_three_brake = flask_version >= (3, 0, 0) and restx_version < (1, 2, 0)
-    if inject_versions and big_three_brake and not versions_injected:
+    if inject_versions and big_three_brake and not _versions_injected:
         from . import version_system
 
         version_system.inject_dunder_version()
+        _versions_injected = True
     if fix_endpoint_from_view and big_three_brake and not _original_endpoint_from_view_func:
         import flask
         from . import endpoint_from_view
