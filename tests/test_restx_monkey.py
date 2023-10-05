@@ -169,6 +169,13 @@ class MonkeyTest(unittest.TestCase):
         except OSError as e:
             os_error = e
         self.assertIsNone(os_error)
+        # skip on no permission
+        os_error = None
+        try:
+            restx_monkey.swagger_ui.replace_static_swagger_files("/root/blabla")
+        except OSError as e:
+            os_error = e
+        self.assertIsNotNone(os_error)
         os_error = None
         # create missing `file` dir
         tmp_static = pathlib.Path(__file__).parent / "__tmp_static__"
