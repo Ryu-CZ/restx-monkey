@@ -2,7 +2,7 @@ name: tests
 
 on:
   push:
-    branches: ["main"]
+    branches: ["dev", "main"]
   pull_request:
     branches: ["main"]
 
@@ -27,11 +27,21 @@ jobs:
       - name: Test with pytest
         run: | 
           python -m coverage run -m unittest tests/test_*
-          python -m coverage xml -o coverage-results-${{ matrix.python-version }}.xml
+          python -m coverage xml -o coverage-results-${{github.ref_name}}-${{ matrix.python-version }}.xml
       - name: Upload pytest test coverage results
         uses: actions/upload-artifact@v3
         with:
-          name: unittest-results-${{ matrix.python-version }}
-          path: coverage-results-${{ matrix.python-version }}.xml
+          name: unittest-results-${{github.ref_name}}-${{ matrix.python-version }}
+          path: coverage-results-${{github.ref_name}}-${{ matrix.python-version }}.xml
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
+  upload-to-codecov:
+    needs: [ run-test ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v3
