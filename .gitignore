@@ -127,8 +127,6 @@ venv.bak/
 /node_modules
 *-lock.json
 
-/src/restx_monkey/static*
-
 # mypy
 .mypy_cache/
 .dmypy.json
