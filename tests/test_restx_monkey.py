@@ -184,10 +184,11 @@ class MonkeyTest(unittest.TestCase):
             tmp_static.mkdir(exist_ok=True)
             restx_monkey.swagger_ui.replace_static_swagger_files(tmp_static)
         except OSError as e:
+            print(traceback.format_exc())
             os_error = e
         finally:
             shutil.rmtree(str(tmp_static), ignore_errors=True)
-        self.assertIsNone(os_error, traceback.format_exc(os_error))
+        self.assertIsNone(os_error)
 
     def test_restx_endpoint_from_view(self):
         """check if restx can be import without errors"""
