@@ -23,9 +23,9 @@ def find_endpoint_parser():
     Note: This helper method exists because reoccurring problem with flask function, but
     actual method body remaining the same in each flask version.
     """
-    import importlib.metadata
+    from . import tools
 
-    flask_version = importlib.metadata.version("flask").split(".")
+    flask_version = tools.get_version_str("flask").split(".")
     try:
         if flask_version[0] == "1":
             # noinspection PyProtectedMember
