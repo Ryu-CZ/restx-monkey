@@ -2,6 +2,7 @@ import sys
 import unittest
 import shutil
 import pathlib
+import traceback
 
 import flask
 
@@ -186,7 +187,7 @@ class MonkeyTest(unittest.TestCase):
             os_error = e
         finally:
             shutil.rmtree(str(tmp_static), ignore_errors=True)
-        self.assertIsNone(os_error)
+        self.assertIsNone(os_error, traceback.format_exc(os_error))
 
     def test_restx_endpoint_from_view(self):
         """check if restx can be import without errors"""
