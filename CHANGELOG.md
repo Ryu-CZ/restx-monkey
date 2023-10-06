@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.5.1] - 2023-10-06
+
+### Fixed
+
+- `fix_endpoint_from_view` now works for any version of flask
+
 ## [0.5.0] - 2023-10-03
 
 ### Added

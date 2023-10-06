@@ -14,7 +14,7 @@ def get_name_strict(view_func: typing.Callable) -> str:
     return view_func.__name__
 
 
-def find_endpoint_parser():
+def move_endpoint_parser():
     """
     Resolve import flask _endpoint_from_view_func.
 
@@ -44,4 +44,13 @@ def find_endpoint_parser():
         _endpoint_from_view_func = None
     if _endpoint_from_view_func is None:
         _endpoint_from_view_func = get_name_strict
-    return _endpoint_from_view_func
+    changed = False
+    import flask
+
+    if not hasattr(flask.helpers, "_endpoint_from_view_func"):
+        flask.helpers._endpoint_from_view_func = _endpoint_from_view_func
+        changed = True
+    if hasattr(flask, "scaffold"):
+        flask.scaffold._endpoint_from_view_func = _endpoint_from_view_func
+        changed = True
+    return changed

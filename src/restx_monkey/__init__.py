@@ -11,7 +11,7 @@ _original_argument_cls = None
 _original_parser_cls = None
 _swagger_ui_is_replaced = False
 _versions_injected = False
-_original_endpoint_from_view_func = None
+_endpoint_from_view_func__is_moved = False
 
 
 # noinspection PyUnresolvedReferences
@@ -33,9 +33,15 @@ def patch_restx(
     :param fix_endpoint_from_view: inject `_endpoint_from_view_func` to `flask.helpers` because `flask` 3.0 moved it to `sansio`
     :param inject_versions: flaks and werkzeug stopped using __version__attribute, put it back
     """
-    global _original_restx_api, _injected_werkzeug_routing, _original_argument_cls, _original_parser_cls, _swagger_ui_is_replaced, _original_endpoint_from_view_func, _versions_injected
+    global _original_restx_api, _injected_werkzeug_routing, _original_argument_cls, _original_parser_cls, _swagger_ui_is_replaced, _endpoint_from_view_func__is_moved, _versions_injected
     flask_version = tools.get_version("flask")
     restx_version = tools.get_version("flask-restx")
+
+    if fix_endpoint_from_view and not _endpoint_from_view_func__is_moved:
+        import flask
+        from . import endpoint_from_view
+
+        _endpoint_from_view_func__is_moved = endpoint_from_view.move_endpoint_parser()
 
     big_three_brake = flask_version >= (3, 0, 0) and restx_version < (1, 2, 0)
     if inject_versions and big_three_brake and not _versions_injected:
@@ -43,15 +49,6 @@ def patch_restx(
 
         version_system.inject_dunder_version()
         _versions_injected = True
-    if fix_endpoint_from_view and big_three_brake and not _original_endpoint_from_view_func:
-        import flask
-        from . import endpoint_from_view
-
-        _original_endpoint_from_view_func = endpoint_from_view.find_endpoint_parser()
-        if not hasattr(flask.helpers, "_endpoint_from_view_func"):
-            flask.helpers._endpoint_from_view_func = _original_endpoint_from_view_func
-        if hasattr(flask, "scaffold"):
-            flask.scaffold._endpoint_from_view_func = _original_endpoint_from_view_func
 
     is_incompatible = flask_version >= (2, 2, 0) and restx_version < (0, 6, 0)
     if not is_incompatible:

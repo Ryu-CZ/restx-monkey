@@ -19,6 +19,7 @@ if sys.version_info.major >= 3 and sys.version_info.minor >= 8:
         return pkg_version
 
 else:
+    # noinspection PyDeprecation
     import pkg_resources
 
     def get_version_str(pkg: str) -> typing.Union[str, None]:
@@ -28,6 +29,7 @@ else:
         :param pkg: package name
         :return: str version
         """
+        # noinspection PyDeprecation
         packages = pkg_resources.working_set.by_key
         if pkg not in packages:
             return None
