@@ -26,22 +26,57 @@ jobs:
           python -m pip install -Ur requirements-dev.txt
       - name: Test with pytest
         run: | 
-          python -m coverage run -m unittest tests/test_*
-          python -m coverage xml -o coverage-results-${{github.ref_name}}-${{ matrix.python-version }}.xml
+          python -m coverage run --context=python${{ matrix.python-version }} -m unittest tests/test_*
+          mv .coverage .coverage.${{ matrix.python-version }}.${{github.ref_name}}.dat
       - name: Upload pytest test coverage results
         uses: actions/upload-artifact@v3
         with:
-          name: unittest-results-${{github.ref_name}}-${{ matrix.python-version }}
-          path: coverage-results-${{github.ref_name}}-${{ matrix.python-version }}.xml
+          name: ".coverage.${{ matrix.python-version }}.${{github.ref_name}}.dat"
+          path: ".coverage.${{ matrix.python-version }}.${{github.ref_name}}.dat"
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+  merge-coverage:
+    needs: [ run-test ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install coverage
+        run: |
+          python -m pip install -U coverage
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: ${{ github.workspace }}/downloaded/
+      - name: Unwrap generated nesting
+        run: |
+          find ./downloaded/ -type f -name "*.dat" -exec mv {} ${{ github.workspace }}/ \;
+      - name: Display structure of workspace
+        run: ls -lAp ${{ github.workspace }}
+      - name: Combine tests
+        run: |
+          python -m coverage combine
+          python -m coverage xml -o coverage-${{github.ref_name}}.xml
+      - name: Upload combined coverage artefact
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-${{github.ref_name}}.xml
+          path: coverage-${{github.ref_name}}.xml
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
   upload-to-codecov:
-    needs: [ run-test ]
+    needs: [ merge-coverage ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download artifacts
         uses: actions/download-artifact@v3
+        with:
+          name: coverage-${{github.ref_name}}.xml
+      - name: Display structure of workspace
+        run: ls -lAp ${{ github.workspace }}
       - name: Upload to Codecov
         uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
