@@ -93,7 +93,7 @@ def patch_restx(
         swagger_ui.replace_static_swagger_files()
         _swagger_ui_is_replaced = True
 
-    if fix_werkzeug_url_coders and werkzeug_version > (2, 3, 0):
+    if fix_werkzeug_url_coders and werkzeug_version > (2, 3, 0) and not _werkzeug_coders_injected:
         from . import werkzeug_routing
 
         werkzeug_routing.add_werkzeug_urls_encode_decode()
