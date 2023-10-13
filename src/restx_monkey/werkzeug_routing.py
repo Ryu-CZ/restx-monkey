@@ -49,3 +49,19 @@ def parse_rule(rule: str) -> t.Iterator[t.Tuple[t.Optional[str], t.Optional[str]
         if ">" in remaining or "<" in remaining:
             raise ValueError(f"malformed url rule: {rule!r}")
         yield None, None, remaining
+
+
+def add_werkzeug_urls_encode_decode():
+    """
+    Inject `werkzeug.urls.url_decode`, `werkzeug.urls.url_encode` if these functions are missing.
+
+    Beware!!! - functions used to replace originals does not have the same header
+    """
+    # fix for flask login
+    import urllib.parse
+    import werkzeug.urls
+
+    if not hasattr(werkzeug.urls, "url_decode"):
+        werkzeug.urls.url_decode = urllib.parse.parse_qs
+    if not hasattr(werkzeug.urls, "url_encode"):
+        werkzeug.urls.url_encode = urllib.parse.urlencode

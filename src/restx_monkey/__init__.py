@@ -1,6 +1,6 @@
 from . import tools
 
-VERSION = (0, 5, 1)
+VERSION = (0, 6, 0)
 __version__ = ".".join(map(str, VERSION))
 
 __all__ = ("patch_restx",)
@@ -12,6 +12,7 @@ _original_parser_cls = None
 _swagger_ui_is_replaced = False
 _versions_injected = False
 _endpoint_from_view_func__is_moved = False
+_werkzeug_coders_injected = False
 
 
 # noinspection PyUnresolvedReferences
@@ -22,6 +23,7 @@ def patch_restx(
     update_swagger_ui: bool = True,
     fix_endpoint_from_view: bool = True,
     inject_versions: bool = True,
+    fix_werkzeug_url_coders: bool = False,
 ) -> None:
     """
     Monkey patch unmaintained `flask-restx`. This has a hidden side effects!!! See params bellow.
@@ -32,10 +34,12 @@ def patch_restx(
     :param update_swagger_ui: replace swagger UI source files with new version
     :param fix_endpoint_from_view: inject `_endpoint_from_view_func` to `flask.helpers` because `flask` 3.0 moved it to `sansio`
     :param inject_versions: flaks and werkzeug stopped using __version__attribute, put it back
+    :param fix_werkzeug_url_coders: inject `werkzeug.urls.url_decode`, `werkzeug.urls.url_encode` if these functions are missing (disabled by default because it is not required by restx)
     """
-    global _original_restx_api, _injected_werkzeug_routing, _original_argument_cls, _original_parser_cls, _swagger_ui_is_replaced, _endpoint_from_view_func__is_moved, _versions_injected
+    global _original_restx_api, _injected_werkzeug_routing, _original_argument_cls, _original_parser_cls, _swagger_ui_is_replaced, _endpoint_from_view_func__is_moved, _versions_injected, _werkzeug_coders_injected
     flask_version = tools.get_version("flask")
     restx_version = tools.get_version("flask-restx")
+    werkzeug_version = tools.get_version("werkzeug")
 
     if fix_endpoint_from_view and not _endpoint_from_view_func__is_moved:
         import flask
@@ -88,3 +92,9 @@ def patch_restx(
 
         swagger_ui.replace_static_swagger_files()
         _swagger_ui_is_replaced = True
+
+    if fix_werkzeug_url_coders and werkzeug_version > (2, 3, 0):
+        from . import werkzeug_routing
+
+        werkzeug_routing.add_werkzeug_urls_encode_decode()
+        _werkzeug_coders_injected = True

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.6.0] - 2023-10-13
+
+### Added
+
+- Introduced switch `fix_werkzeug_url_coders` (default `False`) 
+  - inject `werkzeug.urls.url_decode`, `werkzeug.urls.url_encode` if these functions are missing
+  - **disabled** by default because it is not required by `flask-restx` and new functions does not have exact same headers
+  - fixes error: 
+    - `ImportError: cannot import name 'url_decode' from 'werkzeug.urls'`
+    - `ImportError: cannot import name 'url_encode' from 'werkzeug.urls'`
+
 ## [0.5.1] - 2023-10-06
 
 ### Fixed

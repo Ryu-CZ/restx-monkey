@@ -1,6 +1,6 @@
 {
   "name": "restx-monkey",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Monkey patches for unmaintained flask-restx python package.",
   "repository": "Ryu-CZ/restx-monkey",
   "keywords": [

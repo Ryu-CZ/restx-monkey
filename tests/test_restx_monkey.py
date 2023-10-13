@@ -234,6 +234,24 @@ class MonkeyTest(unittest.TestCase):
         self.assertIsNotNone(getattr(werkzeug, "__version__"))
         self.assertIsNotNone(getattr(flask, "__version__"))
 
+    def test_werkzeug_encoders(self):
+        """check if there are werkzeug.urls.url_decode werkzeug.urls.url_encode"""
+        import src.restx_monkey as restx_monkey
+
+        restx_monkey.patch_restx(
+            replace_parse_rule=False,
+            fix_restx_api=False,
+            fix_restx_parser=False,
+            update_swagger_ui=False,
+            fix_endpoint_from_view=False,
+            inject_versions=False,
+            fix_werkzeug_url_coders=True,
+        )
+        import werkzeug
+
+        self.assertIsNotNone(getattr(werkzeug.urls, "url_decode"))
+        self.assertIsNotNone(getattr(werkzeug.urls, "url_encode"))
+
 
 if __name__ == "__main__":
     unittest.main()
