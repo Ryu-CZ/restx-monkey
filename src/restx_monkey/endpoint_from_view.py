@@ -1,5 +1,5 @@
-import warnings
 import typing
+import warnings
 
 
 class FlaskCompatibilityWarning(DeprecationWarning):

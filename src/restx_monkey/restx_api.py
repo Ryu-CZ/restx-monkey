@@ -7,6 +7,7 @@ class ApiWrapper(flask_restx.Api):
     Fixes of `_register_doc` after app init of `flask_restx.api.Api`. THis is not deprecated behavior
     in `flask.Blueprint` compatibility in `flask` version 2.2+
     """
+
     _doc_registered: bool = False
 
     def init_app(self, app, **kwargs):
@@ -21,4 +22,3 @@ class ApiWrapper(flask_restx.Api):
             return
         super(ApiWrapper, self)._register_doc(app_or_blueprint)
         self._doc_registered = True
-

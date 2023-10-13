@@ -12,7 +12,6 @@ __all__ = (
 
 
 class Argument(flask_restx.reqparse.Argument):
-
     @property
     def __schema__(self):
         param_ = super(Argument, self).__schema__
@@ -50,8 +49,8 @@ class Argument(flask_restx.reqparse.Argument):
             return values
 
 
-A_ = typing.TypeVar('A_', bound=flask_restx.reqparse.Argument)
-PR_ = typing.TypeVar('PR_', bound=flask_restx.reqparse.ParseResult)
+A_ = typing.TypeVar("A_", bound=flask_restx.reqparse.Argument)
+PR_ = typing.TypeVar("PR_", bound=flask_restx.reqparse.ParseResult)
 
 
 class RequestParser(flask_restx.reqparse.RequestParser):
@@ -62,10 +61,10 @@ class RequestParser(flask_restx.reqparse.RequestParser):
     bundle_errors: bool
 
     def __init__(
-            self,
-            argument_class: typing.Type[A_] = Argument,
-            result_class: typing.Type[PR_] = flask_restx.reqparse.ParseResult,
-            trim: bool = False,
-            bundle_errors: bool = False,
+        self,
+        argument_class: typing.Type[A_] = Argument,
+        result_class: typing.Type[PR_] = flask_restx.reqparse.ParseResult,
+        trim: bool = False,
+        bundle_errors: bool = False,
     ) -> None:
         super(RequestParser, self).__init__(argument_class, result_class, trim, bundle_errors)

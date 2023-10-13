@@ -1,6 +1,5 @@
-import typing
 import sys
-
+import typing
 
 if sys.version_info.major >= 3 and sys.version_info.minor >= 8:
     import importlib.metadata

@@ -61,7 +61,6 @@ def patch_restx(
         werkzeug_routing.add_werkzeug_urls_encode_decode()
         _werkzeug_coders_injected = True
 
-
     is_incompatible = flask_version >= (2, 2, 0) and restx_version < (0, 6, 0)
     if not is_incompatible:
         return

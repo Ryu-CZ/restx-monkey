@@ -29,6 +29,7 @@ def replace_static_swagger_files(target_folder: typing.Union[pathlib.Path, str, 
     :param target_folder: folder to replace swagger ui in, if not given flask_restx static is used
     """
     import flask_restx
+
     my_static = pathlib.Path(__file__).parent / "static"
     lib_static = pathlib.Path(target_folder) if target_folder else pathlib.Path(flask_restx.__file__).parent / "static"
 
@@ -38,7 +39,7 @@ def replace_static_swagger_files(target_folder: typing.Union[pathlib.Path, str, 
             itertools.chain(
                 (lib_static,),
                 lib_static.iterdir(),
-            )
+            ),
         )
     )
     if not has_permissions:
