@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.6.1] - 2023-10-13
+
+### Fixed
+
+- `fix_werkzeug_url_coders` is not affected by flask version now
+
 ## [0.6.0] - 2023-10-13
 
 ### Added

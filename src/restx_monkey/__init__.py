@@ -1,6 +1,6 @@
 from . import tools
 
-VERSION = (0, 6, 0)
+VERSION = (0, 6, 1)
 __version__ = ".".join(map(str, VERSION))
 
 __all__ = ("patch_restx",)
@@ -41,6 +41,7 @@ def patch_restx(
     restx_version = tools.get_version("flask-restx")
     werkzeug_version = tools.get_version("werkzeug")
 
+    ### General checks
     if fix_endpoint_from_view and not _endpoint_from_view_func__is_moved:
         import flask
         from . import endpoint_from_view
@@ -53,6 +54,13 @@ def patch_restx(
 
         version_system.inject_dunder_version()
         _versions_injected = True
+
+    if fix_werkzeug_url_coders and werkzeug_version > (2, 3, 0) and not _werkzeug_coders_injected:
+        from . import werkzeug_routing
+
+        werkzeug_routing.add_werkzeug_urls_encode_decode()
+        _werkzeug_coders_injected = True
+
 
     is_incompatible = flask_version >= (2, 2, 0) and restx_version < (0, 6, 0)
     if not is_incompatible:
@@ -92,9 +100,3 @@ def patch_restx(
 
         swagger_ui.replace_static_swagger_files()
         _swagger_ui_is_replaced = True
-
-    if fix_werkzeug_url_coders and werkzeug_version > (2, 3, 0) and not _werkzeug_coders_injected:
-        from . import werkzeug_routing
-
-        werkzeug_routing.add_werkzeug_urls_encode_decode()
-        _werkzeug_coders_injected = True
